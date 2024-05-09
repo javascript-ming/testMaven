@@ -17,7 +17,7 @@ buildNumber.properties
 .idea/
 *.iws
 *.ipr
-*.iml  
+*.iml
 *.xml
 
 # Eclipse
