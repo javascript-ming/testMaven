@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.testJava.mapper.BookMapper">
+    <select id="getAllBooks" resultType="book">
+        select * from t_book;
+    </select>
+    <select id="getBooksByPage" resultType="com.testJava.pojo.Book">
+        SELECT * FROM t_book
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    <select id="countTotal" resultType="int">
+        select count(*) from t_book
+    </select>
+</mapper>

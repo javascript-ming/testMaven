@@ -1,0 +1,6 @@
+0:0:0:0:0:0:0:1 - - [07/May/2024:22:38:29 +0800] "GET /ssm HTTP/1.1" 302 - http-nio-8886-exec-1 0
+0:0:0:0:0:0:0:1 - - [07/May/2024:22:38:30 +0800] "GET /ssm/ HTTP/1.1" 200 52 http-nio-8886-exec-2 687
+0:0:0:0:0:0:0:1 - - [07/May/2024:22:38:40 +0800] "GET /ssm/getAllBooks HTTP/1.1" 200 9 http-nio-8886-exec-3 483
+0:0:0:0:0:0:0:1 - - [07/May/2024:22:38:47 +0800] "GET /ssm/getAllBooks HTTP/1.1" 200 9 http-nio-8886-exec-4 12
+0:0:0:0:0:0:0:1 - - [07/May/2024:22:45:30 +0800] "GET /ssm/getAllBooks HTTP/1.1" 200 50 http-nio-8886-exec-1 635
+0:0:0:0:0:0:0:1 - - [07/May/2024:22:45:37 +0800] "GET /ssm/getAllBooks HTTP/1.1" 200 50 http-nio-8886-exec-2 14

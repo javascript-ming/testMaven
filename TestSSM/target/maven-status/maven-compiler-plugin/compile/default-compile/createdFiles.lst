@@ -1,0 +1,5 @@
+com\testJava\service\BookService.class
+com\testJava\mapper\BookMapper.class
+com\testJava\service\impl\BookServiceImpl.class
+com\testJava\pojo\Book.class
+com\testJava\controller\BookController.class

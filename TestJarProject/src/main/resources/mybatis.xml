@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!--    resource 可以从外部引入键值对，实现-->
+<!--    <properties>-->
+<!--        <property name="username" value="root"/>-->
+<!--        <property name="password" value="rootroot"/>-->
+<!--    </properties>-->
+    <properties resource="db.properties"/>
+<!--    <properties resource="log4j.properties"/>-->
+    <typeAliases>
+        <typeAlias type="com.testJar.pojo.Book" alias="pbk"></typeAlias>
+        <package name="com.testJar.pojo" ></package>
+    </typeAliases>
+    <environments default="mysql">
+        <environment id="mysql">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="./mapper/BookMapper.xml"/>
+<!--        <mapper class="com.testJar.pojo.BookMapper"/>-->
+    </mappers>
+</configuration>
