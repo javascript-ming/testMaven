@@ -1,10 +1,12 @@
 package com.testJava.dto;
 
-import com.sun.istack.internal.NotNull;
+import javax.validation.constraints.NotNull;
 
 public class AddBookDTO {
-    @NotNull(message="bookName必填")
+
+    @NotNull(message="书籍名称必填")
     private String bookName;
+
     private String bookAuthor;
     private Integer bookPrice;
 
