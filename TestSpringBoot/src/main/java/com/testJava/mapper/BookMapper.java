@@ -17,4 +17,8 @@ public interface BookMapper {
 
     // 获取总个数
     int countTotal();
+    // 新增书籍
+    int addBook(Book book);
+    int updateBook(Book book); // 更新书籍
+    int deleteBook(int bookId); // 删除书籍
 }
