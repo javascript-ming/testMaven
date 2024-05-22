@@ -41,18 +41,18 @@ public class BookServiceImpl implements BookService {
     public int addBook(AddBookDTO addBookDTO) {
         // 创建Book实例
         Book book = new Book();
-        book.setName(addBookDTO.getBookName());
-        book.setAuthor(addBookDTO.getBookAuthor());
-        book.setPrice(addBookDTO.getBookPrice());
-        book.setBook_path(addBookDTO.getBookPath());
-        book.setCover_path(addBookDTO.getBookCover());
+        book.setName(addBookDTO.getName());
+        book.setAuthor(addBookDTO.getAuthor());
+        book.setPrice(addBookDTO.getPrice());
+        book.setBook_path(addBookDTO.getBook_path());
+        book.setCover_path(addBookDTO.getCover_path());
         // 调用mybatis的新增
         int res = bookMapper.addBook(book);
         return res;
     }
     @Override
-    public int updateBook(UpdateBookDTO updateBookDTO) {
-        Book book = new Book(updateBookDTO.getId(),updateBookDTO.getBookName(),updateBookDTO.getBookAuthor(), updateBookDTO.getBookPrice(), updateBookDTO.getBookPath(), updateBookDTO.getBookCover());
+    public int updateBook(Book book) {
+        System.out.println(book);
         int res = bookMapper.updateBook(book);
         return res;
     }

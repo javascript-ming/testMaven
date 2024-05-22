@@ -10,6 +10,6 @@ public interface BookService {
     List<Book> getBooksByPage(int currentPage, int pageSize);
     int getTotalCount();
     int addBook(AddBookDTO addBookDTO);
-    int updateBook(UpdateBookDTO updateBookDTO);
+    int updateBook(Book book);
     int deleteBook(int id);
 }

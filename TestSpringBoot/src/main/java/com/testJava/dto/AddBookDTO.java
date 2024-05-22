@@ -5,62 +5,60 @@ import javax.validation.constraints.NotNull;
 public class AddBookDTO {
 
     @NotNull(message="书籍名称必填")
-    private String bookName;
+    private String name;
+    private String author;
+    private Integer price;
+    private String book_path; // 书籍存放路径
+    private String cover_path;
 
-    private String bookAuthor;
-    private Integer bookPrice;
-    private String bookPath; // 书籍存放路径
-    private String bookCover;
-
-    public String getBookName() {
-        return bookName;
+    public @NotNull(message = "书籍名称必填") String getName() {
+        return name;
     }
 
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
+    public void setName(@NotNull(message = "书籍名称必填") String name) {
+        this.name = name;
     }
 
-    public String getBookAuthor() {
-        return bookAuthor;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setBookAuthor(String bookAuthor) {
-        this.bookAuthor = bookAuthor;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public Integer getBookPrice() {
-        return bookPrice;
+    public Integer getPrice() {
+        return price;
     }
 
-    public void setBookPrice(Integer bookPrice) {
-        this.bookPrice = bookPrice;
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 
-    public String getBookPath() {
-        return bookPath;
+    public String getBook_path() {
+        return book_path;
     }
 
-    public void setBookPath(String bookPath) {
-        this.bookPath = bookPath;
+    public void setBook_path(String book_path) {
+        this.book_path = book_path;
     }
 
-    public String getBookCover() {
-        return bookCover;
+    public String getCover_path() {
+        return cover_path;
     }
 
-    public void setBookCover(String bookCover) {
-        this.bookCover = bookCover;
+    public void setCover_path(String cover_path) {
+        this.cover_path = cover_path;
+    }
+
+    public AddBookDTO(String name, String author, Integer price, String book_path, String cover_path) {
+        this.name = name;
+        this.author = author;
+        this.price = price;
+        this.book_path = book_path;
+        this.cover_path = cover_path;
     }
 
     public AddBookDTO() {
     }
-
-    public AddBookDTO(String bookName, String bookAuthor, Integer bookPrice, String bookPath, String bookCover) {
-        this.bookName = bookName;
-        this.bookAuthor = bookAuthor;
-        this.bookPrice = bookPrice;
-        this.bookPath = bookPath;
-        this.bookCover = bookCover;
-    }
-
 }

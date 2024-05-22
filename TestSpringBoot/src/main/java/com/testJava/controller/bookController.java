@@ -1,11 +1,13 @@
 package com.testJava.controller;
 
+import com.qcloud.cos.model.PutObjectResult;
 import com.testJava.dto.AddBookDTO;
 import com.testJava.dto.CommonResponse;
 import com.testJava.dto.PageResponseDTO;
 import com.testJava.dto.UpdateBookDTO;
 import com.testJava.pojo.Book;
 import com.testJava.service.BookService;
+import com.testJava.service.CosUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +18,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.io.File;
 
 @Controller
 @RequestMapping("/books")
 public class bookController {
     @Autowired
     private BookService bookService;
+    @Autowired
+    private CosUploadService cosUploadService;
 
     // 控制单元
     @RequestMapping(path="/getAllBooks", method= RequestMethod.GET)
@@ -88,15 +94,29 @@ public class bookController {
         // 处理DTO中的字段和上传的文件
         // TODO 获取updateBookDTO的字段
         // TODO 文件上传只保存文件存储后的本地路径
+
         if(!bookFile.isEmpty()) {
             try {
-                // TODO 保存文件, 采用腾讯云COS对象存储服务
-                String filePath = "/resource/bookFiles/"+ bookFile.getOriginalFilename();
-                Files.copy(bookFile.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
-                // TODO: 断点续传等
-                CommonResponse<String> res = CommonResponse.success(null, "更新成功");
+                // 将MultipartFile转换为File对象
+                Path tempFile = Files.createTempFile("uploaded-", ".tmp");
+                Files.write(tempFile, bookFile.getBytes());
+                File localFile = tempFile.toFile();
+
+                // 上传文件到COS
+                PutObjectResult result = cosUploadService.uploadFile("test-maven-1254467616", "book_contents/" + bookFile.getOriginalFilename(), localFile);
+
+                // 处理上传结果，例如返回文件的URL等
+                String fileUrl = "https://" + "test-maven-1254467616" + ".cos." + "ap-shanghai" + ".myqcloud.com/" + "book_contents/" + bookFile.getOriginalFilename();
+
+                // 清理临时文件
+                localFile.delete();
+                // 生成Book实例
+                Book book = new Book(updateBookDTO.getId(), updateBookDTO.getName(), updateBookDTO.getAuthor(), updateBookDTO.getPrice(), fileUrl, "");
+                bookService.updateBook(book);
+                CommonResponse<String> res = CommonResponse.success("", "更新成功");
                 return ResponseEntity.status(HttpStatus.OK).body(res);
             } catch (IOException e) {
+                // TODO 日志输出
                 CommonResponse<String> res = CommonResponse.fail(0, "文件上传失败："+e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
             }

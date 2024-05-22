@@ -69,7 +69,7 @@ public class Book {
         System.out.println("book类空构造器");
     }
     // 新的构造器，接受所有字段作为参数
-    public Book(int id, String name, String author, double price, String cover_path, String book_path) {
+    public Book(int id, String name, String author, double price,String book_path, String cover_path ) {
         this(id, name, author, price); // 调用原始构造器初始化基础字段
         this.cover_path = cover_path;
         this.book_path = book_path;

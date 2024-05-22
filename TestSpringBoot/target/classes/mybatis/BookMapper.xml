@@ -13,4 +13,16 @@
     <select id="countTotal" resultType="int">
         select count(*) from t_book
     </select>
+    <insert id="addBook" parameterType="Book" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_book (name, author, price, book_path, book_cover)
+        VALUES (#{name}, #{author}, #{price}, #{book_path}, #{book_cover})
+    </insert>
+    <update id="updateBook" parameterType="Book">
+        update t_book
+        set name = #{name}, author=#{author}, price=#{price}, book_path=#{book_path}, book_cover=#{book_cover}
+        where id=#{id}
+    </update>
+    <delete id="deleteBook" parameterType="int">
+        delete from t_book where id=#{param1}
+    </delete>
 </mapper>
