@@ -1,5 +1,6 @@
 package com.testJava.controller;
 
+import com.qcloud.cos.model.CompleteMultipartUploadResult;
 import com.qcloud.cos.model.PutObjectResult;
 import com.testJava.dto.AddBookDTO;
 import com.testJava.dto.CommonResponse;
@@ -7,6 +8,7 @@ import com.testJava.dto.PageResponseDTO;
 import com.testJava.dto.UpdateBookDTO;
 import com.testJava.pojo.Book;
 import com.testJava.service.BookService;
+import com.testJava.service.CosMutipartUploadService;
 import com.testJava.service.CosUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,8 @@ public class bookController {
     private BookService bookService;
     @Autowired
     private CosUploadService cosUploadService;
+    @Autowired
+    private CosMutipartUploadService cosMutipartUploadService;
 
     // 控制单元
     @RequestMapping(path="/getAllBooks", method= RequestMethod.GET)
@@ -101,10 +105,14 @@ public class bookController {
                 Path tempFile = Files.createTempFile("uploaded-", ".tmp");
                 Files.write(tempFile, bookFile.getBytes());
                 File localFile = tempFile.toFile();
-
-                // 上传文件到COS
-                PutObjectResult result = cosUploadService.uploadFile("test-maven-1254467616", "book_contents/" + bookFile.getOriginalFilename(), localFile);
-
+                // 判断文件size
+                Double fileSize = (double)(localFile.length() / (1024*1024)); // 获取文件大小，单位是字节
+                if(fileSize > 20) {
+                    CompleteMultipartUploadResult result = cosMutipartUploadService.MultipartUpload("test-maven-1254467616", "book_contents/" + bookFile.getOriginalFilename());
+                } else {
+                    // 上传文件到COS
+                    PutObjectResult result = cosUploadService.uploadFile("test-maven-1254467616", "book_contents/" + bookFile.getOriginalFilename(), localFile);
+                }
                 // 处理上传结果，例如返回文件的URL等
                 String fileUrl = "https://" + "test-maven-1254467616" + ".cos." + "ap-shanghai" + ".myqcloud.com/" + "book_contents/" + bookFile.getOriginalFilename();
 
@@ -112,9 +120,20 @@ public class bookController {
                 localFile.delete();
                 // 生成Book实例
                 Book book = new Book(updateBookDTO.getId(), updateBookDTO.getName(), updateBookDTO.getAuthor(), updateBookDTO.getPrice(), fileUrl, "");
-                bookService.updateBook(book);
-                CommonResponse<String> res = CommonResponse.success("", "更新成功");
-                return ResponseEntity.status(HttpStatus.OK).body(res);
+                try {
+                    int updateRes = bookService.updateBook(book);
+                    if(updateRes > 0) {
+                        CommonResponse<String> res = CommonResponse.success("", "更新成功");
+                        return ResponseEntity.status(HttpStatus.OK).body(res);
+                    } else {
+                        CommonResponse<String>  res = CommonResponse.fail(0, "更新失败");
+                        return ResponseEntity.status(HttpStatus.OK).body(res);
+                    }
+                } catch(Exception e) {
+                    CommonResponse<String> res = CommonResponse.fail(0, "服务器内部错误");
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+                }
+
             } catch (IOException e) {
                 // TODO 日志输出
                 CommonResponse<String> res = CommonResponse.fail(0, "文件上传失败："+e.getMessage());
