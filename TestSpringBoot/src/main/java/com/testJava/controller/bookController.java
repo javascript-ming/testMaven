@@ -108,7 +108,7 @@ public class bookController {
                 // 判断文件size
                 Double fileSize = (double)(localFile.length() / (1024*1024)); // 获取文件大小，单位是字节
                 if(fileSize > 20) {
-                    CompleteMultipartUploadResult result = cosMutipartUploadService.MultipartUpload("test-maven-1254467616", "book_contents/" + bookFile.getOriginalFilename());
+                    CompleteMultipartUploadResult result = cosMutipartUploadService.MultipartUpload("test-maven-1254467616", "book_contents/" + bookFile.getOriginalFilename(), localFile);
                 } else {
                     // 上传文件到COS
                     PutObjectResult result = cosUploadService.uploadFile("test-maven-1254467616", "book_contents/" + bookFile.getOriginalFilename(), localFile);
